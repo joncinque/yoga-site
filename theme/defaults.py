@@ -123,7 +123,7 @@ register_setting(
                   "schemes. Enter the number of the chosen color scheme here "
                   "to make it permanent."),
     editable=True,
-    default="3",
+    default="1",
 )
 
 register_setting(

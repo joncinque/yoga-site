@@ -47,7 +47,6 @@
     <script src="{% static "assets/rs-plugin/js/jquery.themepunch.revolution.min.js" %}"></script>
     <script src="{% static "assets/carouFredSel-6.2.1/jquery.carouFredSel-6.2.1.js" %}"></script>
     <script src="{% static "assets/prettyPhoto/js/jquery.prettyPhoto.js" %}"></script>
-    <script src="{% static "assets/jflickrfeed/jflickrfeed.min.js" %}"></script>
     <script src="{% static "assets/UItoTop/js/easing.js" %}"></script>
     <script src="{% static "assets/UItoTop/js/jquery.ui.totop.min.js" %}"></script>
     <script src="{% static "assets/FitVids.js/jquery.fitvids.js" %}"></script>
@@ -134,16 +133,6 @@
             });
             // FitVids
             $(".responsive-video-wrapper").fitVids();
-            {% if settings.FLICKR_ID %}
-            // jflickrfeed
-            $('.flickr-photos-list').jflickrfeed({
-                limit: 9,
-                qstrings: {
-                    id: '{{ settings.FLICKR_ID }}'
-                },
-                itemTemplate: item_template
-            });
-            {% endif %}
             // jQuery UItoTop
             $().UItoTop({ easingType: 'easeOutQuart' });
             // Skin Chooser
@@ -310,20 +299,18 @@
     <section id="page-title-wrapper" class="section page-title-wrapper">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 page-title">
+                <div class="col-xs-12 page-title">
                     <h4>{% block title %}{% endblock %}</h4>
                 </div>
-                <!-- /.page-title -->
+                <!--
                 <div class="col-xs-6 hidden-xs breadcrumb-wrapper">
                     <ol class="breadcrumb pull-right">
                         {% page_menu "pages/menus/breadcrumb.html" %}
                     </ol>
                 </div>
-                <!-- /.breadcrumb-wrapper -->
+                -->
             </div>
-            <!-- /.row -->
         </div>
-        <!-- /.container -->
     </section>
     <!-- /#page-title-wrapper -->
     {% block before_main %}{% endblock %}
@@ -331,9 +318,10 @@
         <div class="container">
             {% block main_sidebar_wrapper %}
             <div class="row">
-                <div class="col-md-9{% if siteconf.sidebar_alignment == 'LE' %} col-md-push-3{% endif %} content-wrapper">
+                <div class="col-md-12 content-wrapper">
                     {% block main %}{% endblock %}
                 </div>
+                <!--
                 <div class="col-md-3{% if siteconf.sidebar_alignment == 'LE' %} col-md-pull-9{% endif %} sidebar{% if request.user|can_view_help %} theme-help{% endif %}"{% if request.user|can_view_help %} data-toggle="tooltip" data-placement="top" data-trigger="manual" title="You can set the alignment of this sidebar in Content -> Site configuration or by using the edit tag."{% endif %}>
                     {% editable siteconf.sidebar_alignment %}
                     <div class="widget search">
@@ -349,6 +337,7 @@
                     {% endeditable %}
                     {% endblock %}
                 </div>
+                -->
             </div>
             {% endblock %}
         </div>
@@ -358,18 +347,7 @@
     <footer id="footer-1" class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="widget about-us">
-                        {% if request.user|can_view_help %}<span class="theme-help" data-toggle="tooltip" data-placement="top" data-trigger="manual" title="The Site Title from Site -> Settings in the admin shows here."></span>{% endif %}
-                        <span class="footer-brand">{{ settings.SITE_TITLE|slice:":3" }}<span>{{ settings.SITE_TITLE|slice:"3:" }}.</span></span>
-                        {% editable siteconf.footer_description %}
-                        {{ siteconf.footer_description|richtext_filters|safe }}
-                        {% endeditable %}
-                    </div>
-                    <!-- /.about-us -->
-                </div>
-                <!-- /.col-md-3 -->
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <div class="widget popular-posts">
                         {% editable siteconf.footer_blog_heading %}
                         <h5 class="subpage-title">{{ siteconf.footer_blog_heading }}</h5>
@@ -394,8 +372,8 @@
                     </div>
                     <!-- /.popular-posts -->
                 </div>
-                <!-- /.col-md-3 -->
-                <div class="col-md-3">
+                <!-- /.col-md-6 -->
+                <div class="col-md-6">
                     <div class="widget tagcloud">
                         {% editable siteconf.footer_menu_heading %}
                         <h5 class="subpage-title">{{ siteconf.footer_menu_heading }}</h5>
@@ -407,22 +385,7 @@
                     </div>
                     <!-- /.tagcloud -->
                 </div>
-                <!-- /.col-md-3 -->
-                <div class="col-md-3">
-                    <div class="widget flickr-photos">
-                        {% editable siteconf.footer_flickr_heading siteconf.footer_flickr_content %}
-                        <h5 class="subpage-title">{{ siteconf.footer_flickr_heading }}</h5>
-                        {% endeditable %}
-                        {% if siteconf.footer_flickr_content %}
-                        {{ siteconf.footer_flickr_content|richtext_filters|safe }}
-                        {% elif settings.FLICKR_ID %}
-                        {% if request.user|can_view_help %}<div class="text-center"><span class="theme-help" data-toggle="tooltip" data-placement="top" data-trigger="manual" title="Set your Flickr id in Site -> Settings in the admin."></span></div>{% endif %}
-                        <ul class="flickr-photos-list"></ul>
-                        {% endif %}
-                    </div>
-                    <!-- /.flickr-photos -->
-                </div>
-                <!-- /.col-md-3 -->
+                <!-- /.col-md-6 -->
             </div>
             <!-- /.row -->
         </div>
@@ -433,7 +396,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 footer-info-wrapper">
-                    <span>{{ settings.SITE_TITLE }} &copy; {% now "Y" %}. Made with <a target="_blank" href="http://mezzathe.me">MEZZaTHEME</a></span>                        
+                    <span>{{ settings.SITE_TITLE }} &copy; {% now "Y" %}</span>
                 </div>
                 <!-- /.footer-info-wrapper -->
                 <div class="col-xs-12 col-sm-6 social-link-wrapper">
