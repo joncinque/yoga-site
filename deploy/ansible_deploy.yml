@@ -11,9 +11,9 @@
     repo_dir: "{{ home_dir }}/{{ repo }}"
     venv_dir: "{{ repo_dir }}/venv"
     requirements_file: "{{ repo_dir }}/requirements.txt"
-    local_key: "./{{ repo }}"
-    priv_key: "{{ keys_dir }}/{{ repo }}"
-    django_dir: "{{ repo_dir }}/yoga-site"
+    local_key: "./{{ repo }}.pk"
+    priv_key: "{{ home_dir }}/{{ repo }}.pk"
+    app_dir: "{{ repo_dir }}/yoga-site"
     static_dir: "{{ repo_dir }}/static"
     force_ssl: false
     gunicorn_conf: "{{ repo_dir }}/gunicorn.conf.py"
@@ -24,12 +24,17 @@
     num_workers: 2
     secret_key: "8xgzu#9k8-3ba%^gkoz)2cl&oo%4!)pm&41e2*&pc65y9&!&60"
     nevercache_key: "+$fe+akjmf)+hw_2icsapprqvvul%&ul*#(pp3(lr&apa6=-jl"
-    local_settings: "{{ django_dir }}/local_settings.py"
+    local_settings: "{{ app_dir }}/local_settings.py"
   tasks:
     - name: Installing base python packages
-      apt: pkg={{item}} state=present update_cahce cache_valid_time=604800
       become: true
-      with_items:
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+        cache_valid_time: 604800
+      vars:
+        packages:
         - git
         - supervisor
         - python3
@@ -90,13 +95,13 @@
     - name: Collecting with django collectstatic
       django_manage:
         command: collectstatic
-        app_path: "{{ django_dir }}"
+        app_path: "{{ repo_dir }}"
         virtualenv: "{{ venv_dir }}"
 
     - name: Migrating db with django migrate
       django_manage:
         command: migrate
-        app_path: "{{ django_dir }}"
+        app_path: "{{ repo_dir }}"
         virtualenv: "{{ venv_dir }}"
 
     - name: Creating gunicorn template
