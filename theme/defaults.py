@@ -7,8 +7,7 @@ from mezzanine.conf import register_setting
 register_setting(
     name="SOCIAL_LINK_FACEBOOK",
     label=_("Facebook link"),
-    description=_("If present a Facebook icon linking here will be in the "
-        "header."),
+    description=_("If present a Facebook icon linking here will be in the header."),
     editable=True,
     default="https://facebook.com/mezzatheme",
 )
@@ -16,17 +15,23 @@ register_setting(
 register_setting(
     name="SOCIAL_LINK_TWITTER",
     label=_("Twitter link"),
-    description=_("If present a Twitter icon linking here will be in the "
-        "header."),
+    description=_("If present a Twitter icon linking here will be in the header."),
     editable=True,
     default="https://twitter.com/mezzatheme",
 )
 
 register_setting(
+    name="SOCIAL_LINK_INSTAGRAM",
+    label=_("Instagram link"),
+    description=_("If present an Instagram icon linking here will be in the header."),
+    editable=True,
+    default="https://facebook.com/mezzatheme",
+)
+
+register_setting(
     name="SOCIAL_LINK_GOOGLE",
     label=_("Google Plus link"),
-    description=_("If present a Google Plus icon linking here will be in the "
-        "header."),
+    description=_("If present a Google Plus icon linking here will be in the header."),
     editable=True,
     default="https://plus.google.com/b/118069550927850290401/118069550927850290401/",
 )
@@ -34,8 +39,7 @@ register_setting(
 register_setting(
     name="SOCIAL_LINK_LINKEDIN",
     label=_("LinkedIn link"),
-    description=_("If present a LinkedIn icon linking here will be in the "
-        "header."),
+    description=_("If present a LinkedIn icon linking here will be in the header."),
     editable=True,
     default="",
 )
@@ -43,8 +47,7 @@ register_setting(
 register_setting(
     name="SOCIAL_LINK_PINTEREST",
     label=_("Pinterest link"),
-    description=_("If present a Pinterest icon linking here will be in the "
-        "header."),
+    description=_("If present a Pinterest icon linking here will be in the header."),
     editable=True,
     default="",
 )
@@ -52,8 +55,7 @@ register_setting(
 register_setting(
     name="SOCIAL_LINK_DRIBBBLE",
     label=_("Dribbble link"),
-    description=_("If present a Dribbble icon linking here will be in the "
-        "footer."),
+    description=_("If present a Dribbble icon linking here will be in the footer."),
     editable=True,
     default="http://dribbble.com/joshcartme",
 )
@@ -68,18 +70,26 @@ register_setting(
 
 register_setting(
     name="SOCIAL_EMAIL",
-    label=_("Phone"),
+    label=_("Email"),
     description=_("If present this email address will show in the header."),
     editable=True,
     default="contact@mezzathe.me",
 )
 
 register_setting(
-    name="FLICKR_ID",
-    label=_("Flickr ID"),
-    description=_("If present a Flickr feed will show in the footer."),
+    name="INSTAGRAM_USER",
+    label=_("Instagram user"),
+    description=_("If present the last few posts from the user will be shown in the footer."),
     editable=True,
-    default="55925941@N08",
+    default="joncyoga",
+)
+
+register_setting(
+    name="INSTAGRAM_POSTS",
+    label=_("Instagram posts"),
+    description=_("If INSTAGRAM_USER is present, decides how many old posts will show in the footer."),
+    editable=True,
+    default="5",
 )
 
 RIGHT = 'RI'
@@ -91,7 +101,7 @@ SIDEBAR_ALIGNMENTS = (
 
 register_setting(
     name="THEME_SIDEBAR_ALIGNMENT",
-    label = "Sidebar alignment",
+    label="Sidebar alignment",
     description=_("For pages that have a sidebar, determines if it is on the "
                   "left or right"),
     editable=True,
@@ -130,6 +140,7 @@ register_setting(
     name="TEMPLATE_ACCESSIBLE_SETTINGS",
     append=True,
     default=("SOCIAL_LINK_FACEBOOK",
+             "SOCIAL_LINK_INSTAGRAM",
              "SOCIAL_LINK_TWITTER",
              "SOCIAL_LINK_GOOGLE",
              "SOCIAL_LINK_LINKEDIN",
@@ -137,7 +148,7 @@ register_setting(
              "SOCIAL_LINK_DRIBBBLE",
              "SOCIAL_PHONE",
              "SOCIAL_EMAIL",
-             "FLICKR_ID",
+             "INSTAGRAM_USER",
              "THEME_SIDEBAR_ALIGNMENT",
              "THEME_BLOG_LIST_LAYOUT",
              "THEME_COLOR_SCHEME"),

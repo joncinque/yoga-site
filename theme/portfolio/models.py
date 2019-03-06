@@ -19,8 +19,8 @@ class Portfolio(Page):
     '''
     A collection of individual portfolio items
     '''
-    columns = models.CharField(max_length=1, choices=COLUMNS_CHOICES,
-        default='3')
+    columns = models.CharField(max_length=1, choices=COLUMNS_CHOICES, default='3')
+
     class Meta:
         verbose_name = _("Portfolio")
         verbose_name_plural = _("Portfolios")
@@ -37,27 +37,29 @@ class PortfolioItem(Page, RichText):
     '''
     An individual portfolio item, should be nested under a Portfolio
     '''
-    layout = models.PositiveIntegerField(choices=PORTFOLIO_ITEM_LAYOUT_CHOICES,
-        default=1)
+    layout = models.PositiveIntegerField(choices=PORTFOLIO_ITEM_LAYOUT_CHOICES, default=1)
     description_heading = models.CharField(max_length=200,
                                            default="Project description")
-    featured_image = FileField(verbose_name=_("Featured Image"),
-        upload_to=upload_to("theme.PortfolioItem.featured_image", "portfolio"),
-        format="Image", max_length=255, null=True, blank=True)
-    featured_video = models.TextField(blank=True,
-        help_text= "Optional, putting video embed code (iframe) here, will "
-                   "override a Featured image specified above.  This has "
-                   "been tested to work with Youtube and Vimeo, but may "
-                   "work with other iframes as well.")
+    featured_image = FileField(
+            verbose_name=_("Featured Image"),
+            upload_to=upload_to("theme.PortfolioItem.featured_image", "portfolio"),
+            format="Image", max_length=255, null=True, blank=True)
+    featured_video = models.TextField(
+            blank=True,
+            help_text="Optional, putting video embed code (iframe) here, will "
+                      "override a Featured image specified above.  This has "
+                      "been tested to work with Youtube and Vimeo, but may "
+                      "work with other iframes as well.")
     details_heading = models.CharField(max_length=200, default="Project details")
-    categories = models.ManyToManyField("PortfolioItemCategory",
-                                        verbose_name=_("Categories"),
-                                        blank=True,
-                                        related_name="portfolioitems")
-    website = models.CharField(max_length=2000, blank=True,
-        help_text="A link to the finished project or clients website "
-                  " (optional)")
-    related_items = models.ManyToManyField("self", blank=True)
+    # categories = models.ManyToManyField("PortfolioItemCategory",
+    #                                     verbose_name=_("Categories"),
+    #                                     blank=True,
+    #                                     related_name="portfolioitems")
+    website = models.CharField(
+         max_length=2000,
+         blank=True,
+         help_text="A link to the finished project or clients website (optional)")
+    # related_items = models.ManyToManyField("self", blank=True)
 
     class Meta:
         verbose_name = _("Portfolio item")
@@ -78,8 +80,9 @@ class PortfolioItemImage(Orderable):
     An image for a PortfolioItem
     '''
     portfolioitem = models.ForeignKey(PortfolioItem, related_name="images")
-    file = FileField(_("File"), max_length=200, format="Image",
-        upload_to=upload_to("theme.PortfolioItemImage.file", "portfolio"))
+    file = FileField(
+            _("File"), max_length=200, format="Image",
+            upload_to=upload_to("theme.PortfolioItemImage.file", "portfolio"))
     alt_text = models.CharField(max_length=200, blank=True)
 
     class Meta:
@@ -91,7 +94,7 @@ class PortfolioItemImage(Orderable):
             self.portfolioitem.featured_image = self.file
             self.portfolioitem.save()
             if self.id:
-               self.delete()
+                self.delete()
         else:
             super(PortfolioItemImage, self).save(*args, **kwargs)
 
@@ -105,4 +108,3 @@ class PortfolioItemCategory(Slugged):
         verbose_name = _("Portfolio Item Category")
         verbose_name_plural = _("Portfolio Item Categories")
         ordering = ("title",)
-

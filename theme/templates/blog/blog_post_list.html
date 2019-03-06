@@ -78,6 +78,7 @@
 </div>
 {% endif %}
 
+{% if false %}
 {% editable siteconf.blog_layout %}
 {% for blog_post in blog_posts.object_list %}
 {% if siteconf.blog_layout == 2 %}
@@ -166,6 +167,7 @@
 
 {% endfor %}
 {% endeditable %}
+{% endif %}
 <div class="clearfix"></div>
 {% pagination_for blog_posts %}
 

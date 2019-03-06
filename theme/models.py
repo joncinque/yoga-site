@@ -41,7 +41,7 @@ class SiteConfiguration(SiteRelated):
         choices=SIDEBAR_ALIGNMENTS, default='RI',
         help_text="For pages that have a sidebar, determines if it is on the "
                   "left or right")
-    default_sidebar = models.TextField()
+    default_sidebar = models.TextField(blank=True, null=True)
     blog_layout = models.PositiveIntegerField(choices=BLOG_LAYOUTS, default=2,
         help_text="Determines how many blog posts are shown per row in the "
                   "blog list view")

@@ -21,7 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 
 ADMIN_MENU_ORDER = (
     ("Content", ("pages.Page", "blog.BlogPost", "theme.SiteConfiguration",
-       "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
+     "generic.ThreadedComment", ("Media Library", "fb_browse"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),
     ("Users", ("auth.User", "auth.Group",)),
 )
@@ -60,7 +60,7 @@ EXTRA_MODEL_FIELDS = (
     # BlogPost featured video:
     (
         "mezzanine.blog.models.BlogPost.featured_video",
-        "TextField", # 'django.db.models.' is implied if path is omitted.
+        "TextField",
         ("Featured video",),
         {"blank": True,
          "help_text": "Optional, putting video embed code (iframe) here, will "
@@ -177,6 +177,12 @@ STATIC_URL = "/static/"
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = os.path.join(PROJECT_ROOT, STATIC_URL.strip("/"))
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
@@ -243,10 +249,12 @@ INSTALLED_APPS = (
     "mezzanine.pages",
     "mezzanine.galleries",
     "mezzanine.twitter",
-    #"mezzanine.accounts",
-    #"mezzanine.mobile",
     "theme.blog_mods",
     "theme.portfolio",
+    # "mezzanine.accounts",
+    # "mezzanine.mobile",
+    # "sorl.thumbnail",
+    "django_instagram",
 )
 
 # List of middleware classes to use. Order is important; in the request phase,
@@ -267,8 +275,8 @@ MIDDLEWARE_CLASSES = (
 
     "mezzanine.core.request.CurrentRequestMiddleware",
     "mezzanine.core.middleware.RedirectFallbackMiddleware",
-    "mezzanine.core.middleware.TemplateForDeviceMiddleware",
-    "mezzanine.core.middleware.TemplateForHostMiddleware",
+    # "mezzanine.core.middleware.TemplateForDeviceMiddleware",
+    # "mezzanine.core.middleware.TemplateForHostMiddleware",
     "mezzanine.core.middleware.AdminLoginInterfaceSelectorMiddleware",
     "mezzanine.core.middleware.SitePermissionMiddleware",
     # Uncomment the following if using any of the SSL settings:

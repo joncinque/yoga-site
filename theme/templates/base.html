@@ -244,6 +244,9 @@
                         {% if settings.SOCIAL_LINK_FACEBOOK %}
                         <li><a target="_blank" href="{{ settings.SOCIAL_LINK_FACEBOOK }}"><i class="fa fa-facebook"></i></a></li>
                         {% endif %}
+                        {% if settings.SOCIAL_LINK_INSTAGRAM %}
+                        <li><a target="_blank" href="{{ settings.SOCIAL_LINK_INSTAGRAM }}"><i class="fa fa-instagram"></i></a></li>
+                        {% endif %}
                         {% if settings.SOCIAL_LINK_GOOGLE %}
                         <li><a target="_blank" href="{{ settings.SOCIAL_LINK_GOOGLE }}"><i class="fa fa-google-plus"></i></a></li>
                         {% endif %}
@@ -278,7 +281,7 @@
                     <span class="sr-only">Toggle navigation</span>
                     <span class="fa fa-bars"></span>
                     </button>
-                    <a class="navbar-brand" href="/">{{ settings.SITE_TITLE|slice:":3" }}<span>{{ settings.SITE_TITLE|slice:"3:" }}.</span>
+                    <a class="navbar-brand" href="/">{{ settings.SITE_TITLE|slice:":4" }}<span>{{ settings.SITE_TITLE|slice:"4:" }}.</span>
                     {% if request.user|can_view_help %}<span class="theme-help" data-toggle="tooltip" data-placement="right" data-trigger="manual" title="The Site Title from Site -> Settings in the admin shows here."></span>{% endif %}
                     </a>
                 </div>
@@ -346,6 +349,27 @@
 
     <footer id="footer-1" class="footer">
         <div class="container">
+            {% if settings.INSTAGRAM_USER %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="widget recent-instagram">
+                        <h5 class="subpage-title">Recent Instagram Posts</h5>
+                        {% instagram_user_recent_media_variable settings.INSTAGRAM_USER %}
+                        <ul class="recent-posts">
+                        {% for media in recent_media %}
+                            <div class="django_instagram_media_wall_item">
+                                <a href="//instagram.com/p/{{ media.shortcode }}" target="_blank">
+                                    <img src="{{ media.thumbnail_src }}"/>
+                                </a>
+                            </div>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- /.recent-instagram-posts -->
+                </div>
+                <!-- /.col-md-6 -->
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-6">
                     <div class="widget popular-posts">
@@ -404,6 +428,9 @@
                         {% if request.user|can_view_help %}<li><span class="theme-help" data-toggle="tooltip" data-placement="left" data-trigger="manual" title="Edit these in Site -> Settings in the admin"></span></li>{% endif %}
                         {% if settings.SOCIAL_LINK_FACEBOOK %}
                         <li><a target="_blank" href="{{ settings.SOCIAL_LINK_FACEBOOK }}"><i class="fa fa-facebook"></i></a></li>
+                        {% endif %}
+                        {% if settings.SOCIAL_LINK_INSTAGRAM %}
+                        <li><a target="_blank" href="{{ settings.SOCIAL_LINK_INSTAGRAM }}"><i class="fa fa-instagram"></i></a></li>
                         {% endif %}
                         {% if settings.SOCIAL_LINK_GOOGLE %}
                         <li><a target="_blank" href="{{ settings.SOCIAL_LINK_GOOGLE }}"><i class="fa fa-google-plus"></i></a></li>

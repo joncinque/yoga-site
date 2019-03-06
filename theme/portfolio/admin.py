@@ -5,14 +5,15 @@ from mezzanine.core.admin import TabularDynamicInlineAdmin
 from mezzanine.pages.admin import PageAdmin
 
 from .models import (Portfolio,
-                    PortfolioItem,
-                    PortfolioItemImage,
-                    PortfolioItemDetail,
-                    PortfolioItemCategory)
+                     PortfolioItem,
+                     PortfolioItemImage,
+                     PortfolioItemDetail,
+                     PortfolioItemCategory)
 
 
 class PortfolioItemImageInline(TabularDynamicInlineAdmin):
     model = PortfolioItemImage
+
 
 class PortfolioItemDetailInline(TabularDynamicInlineAdmin):
     model = PortfolioItemDetail

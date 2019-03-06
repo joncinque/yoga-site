@@ -325,7 +325,7 @@ textarea {
     width: 100% !important;
     position: relative;
     padding: 0;
-    max-height: 400px !important;
+    max-height: 900px !important;
     overflow: hidden;
 }
 
@@ -334,8 +334,8 @@ textarea {
     color: #fff;
     text-shadow: none;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 20px;
+    font-size: 40px;
+    line-height: 40px;
     font-family: 'Montserrat', sans-serif;
     padding: 3px 4px;
     padding-top: 1px;
@@ -351,8 +351,8 @@ textarea {
     color: #fff;
     text-shadow: none;
     font-weight: 700;
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 50px;
+    line-height: 56px;
     font-family: 'Open Sans', sans-serif;
     padding: 3px 10px;
     margin: 0px;
@@ -2401,4 +2401,19 @@ address {
 }
 .skins-wrapper .list-inline > li .color-skin.active, .skins-wrapper .list-inline > li .color-skin:hover {
     outline: 2px solid #2c3e50;
+}
+
+/* Page styling
+ * -------------------------- */
+
+.weekly-schedule td {
+  padding-right: 20px;
+}
+
+.weekly-schedule img {
+  padding: 20px 0;
+}
+
+.about-page img {
+  padding: 10px 0;
 }

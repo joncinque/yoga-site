@@ -1,0 +1,125 @@
+---
+- hosts: all
+  remote_user: yoga
+  vars:
+    user: yoga
+    home_dir: "/home/{{ user }}"
+    root_domain: joncyoga.com
+    admin_email: joncyoga+admin@gmail.com
+    repo: yoga-site
+    repo_url: "git@github.com:joncinque/{{ repo }}.git"
+    repo_dir: "{{ home_dir }}/{{ repo }}"
+    venv_dir: "{{ repo_dir }}/venv"
+    requirements_file: "{{ repo_dir }}/requirements.txt"
+    local_key: "./{{ repo }}"
+    priv_key: "{{ keys_dir }}/{{ repo }}"
+    django_dir: "{{ repo_dir }}/yoga-site"
+    static_dir: "{{ repo_dir }}/static"
+    force_ssl: false
+    gunicorn_conf: "{{ repo_dir }}/gunicorn.conf.py"
+    socket_path: "unix:{{ repo_dir }}/gunicorn.sock"
+    django_project: yoga-site
+    supervisor_conf: "/etc/supervisor/conf.d/{{ django_project }}.conf"
+    dbname: "{{ django_project }}.db"
+    num_workers: 2
+    secret_key: "8xgzu#9k8-3ba%^gkoz)2cl&oo%4!)pm&41e2*&pc65y9&!&60"
+    nevercache_key: "+$fe+akjmf)+hw_2icsapprqvvul%&ul*#(pp3(lr&apa6=-jl"
+    local_settings: "{{ django_dir }}/local_settings.py"
+  tasks:
+    - name: Installing base python packages
+      apt: pkg={{item}} state=present update_cahce cache_valid_time=604800
+      become: true
+      with_items:
+        - git
+        - supervisor
+        - python3
+        - python3-venv
+        - python3-pip
+
+    - name: Check if swapfile exists
+      stat: path=/swapfile
+      register: swapfile_status
+
+    - name: Create swapfile
+      include_role: name=oefenweb.swapfile
+      become: true
+      vars:
+        swapfile_file: /swapfile
+        swapfile_size: 2G
+        swapfile_swappiness: 10
+        swapfile_vfs_cache_pressure: 50
+      when: not swapfile_status.stat.exists
+
+    - name: Copy over private key
+      copy:
+        src: "{{ local_key }}"
+        dest: "{{ priv_key }}"
+        mode: 0600
+        owner: yoga
+        group: yoga
+
+    - name: Checking out site code
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_dir }}"
+        depth: 1
+        key_file: "{{ priv_key }}"
+        accept_hostkey: yes
+        force: yes
+
+    - name: Creating virtualenv with pip
+      pip:
+        virtualenv: "{{ venv_dir }}"
+        virtualenv_command: /usr/bin/python3 -m venv
+        name: pip
+        state: latest
+
+    - name: Installing requirements
+      pip:
+        executable: "{{ venv_dir }}/bin/pip"
+        requirements: "{{ requirements_file }}"
+
+    - name: Creating local_settings
+      template:
+        src: local_settings.py.j2
+        dest: "{{ local_settings }}"
+
+    - name: Creating static_root dir
+      file: path={{ static_dir }} state=directory mode=0755
+
+    - name: Collecting with django collectstatic
+      django_manage:
+        command: collectstatic
+        app_path: "{{ django_dir }}"
+        virtualenv: "{{ venv_dir }}"
+
+    - name: Migrating db with django migrate
+      django_manage:
+        command: migrate
+        app_path: "{{ django_dir }}"
+        virtualenv: "{{ venv_dir }}"
+
+    - name: Creating gunicorn template
+      template:
+        src: gunicorn.conf.py.j2
+        dest: "{{ gunicorn_conf }}"
+
+    - name: Deploying supervisor conf file
+      become: true
+      template:
+        src: supervisor.conf.j2
+        dest: "{{ supervisor_conf }}"
+
+    - name: Restarting gunicorn
+      become: true
+      supervisorctl: "name={{ django_project }} state=restarted"
+
+    - name: Setting up nginx
+      include_role: name=jdauphant.nginx
+      vars:
+        nginx_http_params:
+          - sendfile on
+          - access_log /var/log/nginx/access.log
+        nginx_sites:
+          joncyoga:
+            template: nginx.conf.j2

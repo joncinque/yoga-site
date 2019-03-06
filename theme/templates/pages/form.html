@@ -18,6 +18,8 @@
         {% endif %}
         {% endeditable %}
     </div>
+    {% if request.GET.sent %}
+    {% else %}
     <div class="col-md-4 wrapper-2 {% if siteconf.sidebar_alignment == 'LE' %} col-md-pull-8{% endif %} sidebar{% if request.user|can_view_help %} theme-help{% endif %}"{% if request.user|can_view_help %} data-toggle="tooltip" data-placement="top" data-trigger="manual" title="You can set the alignment of this sidebar in Content -> Site configuration or by using the edit tag."{% endif %}>
         {% with page.form as page_form %}
         {% editable page_form.content %}
@@ -25,6 +27,7 @@
         {% endeditable %}
         {% endwith %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}
 

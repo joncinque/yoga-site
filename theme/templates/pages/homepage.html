@@ -11,7 +11,7 @@ $(document).ready(function() {
     $('.fullwidthbanner').revolution({
         delay: 9000,
         startwidth: 1200,
-        startheight: 400,
+        startheight: 900,
 
         onHoverStop: "on",
 
@@ -92,12 +92,14 @@ $(document).ready(function() {
                         {% endif %}
                     </div>
 
+                    <!--
                     <div class="caption lfr ltr"
                         data-x="685"
                         data-y="0"
                         data-speed="300"
                         data-start="3000"
                         data-easing="easeOutExpo"><img src="{{ MEDIA_URL }}{{ slide.image }}" alt="Slide Image"></div>
+                    -->
                 </li>
                 {% endif %}
                 {% endfor %}
@@ -248,7 +250,7 @@ $(document).ready(function() {
             <div class="awesome-callout">
                 <h2>{{ homepage.breakout_heading }}</h2>
                 {{ homepage.breakout_content|richtext_filters|safe }}
-                <a href="{{ homepage.breakout_button_link }}" class="btn btn-flat flat-color btn-lg">{{ homepage.breakout_button_text }}</a>
+                <a href="{{ homepage.breaktou_button_link }}" target="_blank" class="btn btn-flat flat-color btn-lg">{{ homepage.breakout_button_text }}</a>
             </div>
             {% endeditable %}
             <!-- /.awesome-callout -->
