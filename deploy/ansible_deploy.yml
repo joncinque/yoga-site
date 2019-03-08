@@ -15,6 +15,7 @@
     priv_key: "{{ home_dir }}/{{ repo }}.pk"
     app_dir: "{{ repo_dir }}/yoga-site"
     static_dir: "{{ repo_dir }}/static"
+    media_dir: "{{ repo_dir }}/media"
     force_ssl: false
     gunicorn_conf: "{{ repo_dir }}/gunicorn.conf.py"
     socket_path: "unix:{{ repo_dir }}/gunicorn.sock"
@@ -91,12 +92,34 @@
 
     - name: Creating static_root dir
       file: path={{ static_dir }} state=directory mode=0755
+      tags: static
 
-    - name: Collecting with django collectstatic
+    - name: Local collecting with django collectstatic
       django_manage:
         command: collectstatic
-        app_path: "{{ repo_dir }}"
-        virtualenv: "{{ venv_dir }}"
+        app_path: "{{ playbook_dir }}/../"
+        virtualenv: "{{ playbook_dir }}/../venv"
+      delegate_to: localhost
+      run_once: true
+      tags: static
+
+    - name: Copying media to server
+      synchronize:
+        src: "{{ playbook_dir }}/../media"
+        dest: "{{ media_dir }}"
+      tags: static
+
+    - name: Copying static to server
+      synchronize: 
+        src: "{{ playbook_dir }}/../static"
+        dest: "{{ static_dir }}"
+      tags: static
+
+    - name: Copying database to server
+      synchronize:
+        src: "{{ playbook_dir }}/../{{ dbname }}"
+        dest: "{{ repo_dir }}"
+      tags: static
 
     - name: Migrating db with django migrate
       django_manage:
@@ -108,16 +131,19 @@
       template:
         src: gunicorn.conf.py.j2
         dest: "{{ gunicorn_conf }}"
+      tags: deploy
 
     - name: Deploying supervisor conf file
       become: true
       template:
         src: supervisor.conf.j2
         dest: "{{ supervisor_conf }}"
+      tags: deploy
 
     - name: Restarting gunicorn
       become: true
       supervisorctl: "name={{ django_project }} state=restarted"
+      tags: deploy
 
     - name: Setting up nginx
       include_role: name=jdauphant.nginx
@@ -127,4 +153,6 @@
           - access_log /var/log/nginx/access.log
         nginx_sites:
           joncyoga:
-            template: nginx.conf.j2
+            template: joncyoga.conf.j2
+        ansible_become: true
+      tags: nginx

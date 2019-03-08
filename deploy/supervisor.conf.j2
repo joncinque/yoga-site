@@ -1,8 +1,8 @@
 [program:{{ django_project }}]
-command={{ venv_dir }})/bin/gunicorn -c gunicorn.conf.py -p gunicorn.pid {{ django_project }}.wsgi:application
+command={{ venv_dir }}/bin/gunicorn -c gunicorn.conf.py -p gunicorn.pid {{ django_project }}.wsgi:application
 directory={{ repo_dir }}
 user={{ user }}
 autostart=true
-stdout_logfile={{ repo_dir }}/{{ proj_name }}_supervisor
+stdout_logfile={{ repo_dir }}/{{ django_project }}_supervisor
 autorestart=true
 redirect_stderr=true

@@ -23,7 +23,7 @@ server {
 {% endif %}
 
     # Deny illegal Host headers
-    if ($host !~* ^(%(domains_regex)s)$) {
+    if ($host !~* ^({{ root_domain }}|www.{{ root_domain }})$) {
         return 444;
     }
 
