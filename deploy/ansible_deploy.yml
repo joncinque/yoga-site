@@ -90,10 +90,6 @@
         src: local_settings.py.j2
         dest: "{{ local_settings }}"
 
-    - name: Creating static_root dir
-      file: path={{ static_dir }} state=directory mode=0755
-      tags: static
-
     - name: Local collecting with django collectstatic
       django_manage:
         command: collectstatic
@@ -106,14 +102,14 @@
     - name: Copying media to server
       synchronize:
         src: "{{ playbook_dir }}/../media"
-        dest: "{{ media_dir }}"
-      tags: static
+        dest: "{{ repo_dir }}"
+      tags: synch
 
     - name: Copying static to server
       synchronize: 
         src: "{{ playbook_dir }}/../static"
-        dest: "{{ static_dir }}"
-      tags: static
+        dest: "{{ repo_dir }}"
+      tags: synch
 
     - name: Copying database to server
       synchronize:
