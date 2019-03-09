@@ -16,7 +16,7 @@
     app_dir: "{{ repo_dir }}/yoga-site"
     static_dir: "{{ repo_dir }}/static"
     media_dir: "{{ repo_dir }}/media"
-    force_ssl: false
+    force_ssl: true
     gunicorn_conf: "{{ repo_dir }}/gunicorn.conf.py"
     socket_path: "unix:{{ repo_dir }}/gunicorn.sock"
     django_project: yoga-site
@@ -140,6 +140,22 @@
       become: true
       supervisorctl: "name={{ django_project }} state=restarted"
       tags: deploy
+
+    - name: Getting keys through certbot
+      include_role: name=geerlingguy.certbot
+      vars:
+        certbot_admin_email: "{{ admin_email }}"
+        certbot_create_if_missing: true
+        certbot_create_standalone_stop_services: ['nginx']
+        certbot_auto_renew_user: root
+        certbot_auto_renew_minute: 30
+        certbot_auto_renew_hour: 3
+        certbot_auto_renew_options: "--quiet --no-self-upgrade --pre-hook='systemctl stop nginx' --post-hook='systemctl start nginx'"
+        certbot_certs:
+          - domains:
+            - "{{ root_domain }}"
+        ansible_become: true
+      tags: certbot
 
     - name: Setting up nginx
       include_role: name=jdauphant.nginx

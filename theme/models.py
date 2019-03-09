@@ -136,7 +136,7 @@ class IconBox(Orderable):
     icon = models.CharField(max_length=50,
         help_text="Enter the name of a font awesome icon, i.e. "
                   "fa-eye. A list is available here "
-                  "http://fontawesome.io/")
+                  "https://fontawesome.io/")
     title = models.CharField(max_length=100)
     content = RichTextField()
     link = models.CharField(max_length=2000, blank=True,

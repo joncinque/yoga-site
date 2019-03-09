@@ -25,7 +25,7 @@ register_setting(
     label=_("Instagram link"),
     description=_("If present an Instagram icon linking here will be in the header."),
     editable=True,
-    default="https://facebook.com/mezzatheme",
+    default="https://instagram.com/joncyoga",
 )
 
 register_setting(
