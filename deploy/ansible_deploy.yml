@@ -42,20 +42,6 @@
         - python3-venv
         - python3-pip
 
-    - name: Check if swapfile exists
-      stat: path=/swapfile
-      register: swapfile_status
-
-    - name: Create swapfile
-      include_role: name=oefenweb.swapfile
-      become: true
-      vars:
-        swapfile_file: /swapfile
-        swapfile_size: 2G
-        swapfile_swappiness: 10
-        swapfile_vfs_cache_pressure: 50
-      when: not swapfile_status.stat.exists
-
     - name: Copy over private key
       copy:
         src: "{{ local_key }}"
