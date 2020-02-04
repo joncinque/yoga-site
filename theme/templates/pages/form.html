@@ -11,9 +11,13 @@
             {{ page.form.response|richtext_filters|safe }}
             {% endeditable %}
         {% else %}
-            <form method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+            <form action="?" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
                 {% fields_for form %}
-                    <input class="btn btn-primary btn-large" type="submit" value="{{ page.form.button_text }}">
+                <script>function enableBtn(){document.getElementById("formSubmitButton").disabled = false;}</script>
+                <div class="g-recaptcha" data-callback="enableBtn"
+                     data-sitekey="{{ settings.GOOGLE_RECAPTCHA_KEY }}"></div>
+                <br />
+                <input class="btn btn-primary btn-large" disabled id="formSubmitButton" type="submit" value="{{ page.form.button_text }}">
             </form>
         {% endif %}
         {% endeditable %}

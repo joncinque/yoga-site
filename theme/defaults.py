@@ -3,6 +3,16 @@ from django.utils.translation import ugettext_lazy as _
 
 from mezzanine.conf import register_setting
 
+from django.conf import settings
+
+
+register_setting(
+    name="GOOGLE_RECAPTCHA_KEY",
+    label=_("Google reCAPTCHA key"),
+    description=_("Site ID key to use for form validation, preventing spam bots"),
+    editable=True,
+    default=settings.GOOGLE_RECAPTCHA_KEY,
+)
 
 register_setting(
     name="SOCIAL_LINK_FACEBOOK",
@@ -151,5 +161,6 @@ register_setting(
              "INSTAGRAM_USER",
              "THEME_SIDEBAR_ALIGNMENT",
              "THEME_BLOG_LIST_LAYOUT",
-             "THEME_COLOR_SCHEME"),
+             "THEME_COLOR_SCHEME",
+             "GOOGLE_RECAPTCHA_KEY"),
 )

@@ -27,14 +27,15 @@
     <link href="{% static "assets/css/stylesheet.css" %}" rel="stylesheet">
     <link href="{% static "assets/css/skins.css" %}" rel="stylesheet">
     <link href="{% static "css/mezzatheme.css" %}" rel="stylesheet">
-    <!-- Font Awesome  -->    
+    <!-- Font Awesome  -->
     <link href="{% static "assets/font-awesome-4.0.3/css/font-awesome.css" %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
     {% endcompress %}
 
-    <!-- Google Fonts -->    
+    <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic|Montserrat:400,700' rel='stylesheet' type='text/css'>
 
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         var item_template = '<li><a href="{% templatetag openvariable %}image_b{% templatetag closevariable %}"><img src="{% templatetag openvariable %}image_s{% templatetag closevariable %}" alt="{% templatetag openvariable %}title{% templatetag closevariable %}" /></a></li>'
     </script>
@@ -203,7 +204,7 @@
         });
         $(window).resize(function () {
             caroufredsel();
-        });   
+        });
     </script>
     {% block extra_js %}{% endblock %}
     {% endcompress %}

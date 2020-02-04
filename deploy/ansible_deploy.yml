@@ -11,9 +11,7 @@
     repo_dir: "{{ home_dir }}/{{ repo }}"
     venv_dir: "{{ repo_dir }}/venv"
     requirements_file: "{{ repo_dir }}/requirements.txt"
-    local_key: "./{{ repo }}.pk"
-    priv_key: "{{ home_dir }}/{{ repo }}.pk"
-    app_dir: "{{ repo_dir }}/yoga-site"
+    app_dir: "{{ repo_dir }}/{{ repo }}"
     static_dir: "{{ repo_dir }}/static"
     media_dir: "{{ repo_dir }}/media"
     force_ssl: true
@@ -23,10 +21,12 @@
     supervisor_conf: "/etc/supervisor/conf.d/{{ django_project }}.conf"
     dbname: "{{ django_project }}.db"
     num_workers: 2
-    secret_key: "8xgzu#9k8-3ba%^gkoz)2cl&oo%4!)pm&41e2*&pc65y9&!&60"
-    nevercache_key: "+$fe+akjmf)+hw_2icsapprqvvul%&ul*#(pp3(lr&apa6=-jl"
     local_settings: "{{ app_dir }}/local_settings.py"
+    priv_key: "{{ home_dir }}/{{ repo }}.pk"
   tasks:
+    - name: Including vars
+      include_vars: vars.yml
+
     - name: Installing base python packages
       become: true
       apt:
@@ -106,7 +106,7 @@
       tags: synch
 
     - name: Copying static to server
-      synchronize: 
+      synchronize:
         src: "{{ playbook_dir }}/../static"
         dest: "{{ repo_dir }}"
       tags: synch
