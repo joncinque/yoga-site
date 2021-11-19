@@ -1,5 +1,5 @@
 [mainmachine]
-joncyoga.com
+jonc.yoga
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
