@@ -7,7 +7,7 @@
     root_domain: jonc.yoga
     admin_email: joncyoga+admin@gmail.com
     repo: yoga-site
-    repo_url: "git@github.com:joncinque/{{ repo }}.git"
+    repo_url: "https://github.com/joncinque/{{ repo }}.git"
     repo_dir: "{{ home_dir }}/{{ repo }}"
     venv_dir: "{{ repo_dir }}/venv"
     requirements_file: "{{ repo_dir }}/requirements.txt"
@@ -75,6 +75,12 @@
       template:
         src: local_settings.py.j2
         dest: "{{ local_settings }}"
+
+    - name: Creating local_settings locally
+      template:
+        src: local_settings.py.j2
+        dest: "{{ playbook_dir }}/../{{ repo }}/local_settings.py"
+      delegate_to: localhost
 
     - name: Local collecting with django collectstatic
       django_manage:

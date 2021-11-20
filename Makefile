@@ -6,4 +6,4 @@ pull_from_prod:
 	scp -r yoga@jonc.yoga:/home/yoga/yoga-site/static .
 
 deploy:
-	cd deploy && ansible_playbook ansible_deploy.yml -i hosts --key-file yoga -K
+	cd deploy && ansible-playbook ansible_deploy.yml -i hosts --key-file yoga -K
